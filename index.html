@@ -967,6 +967,637 @@
   }
   .footer-links a:hover { color: var(--cream); }
 
+  /* ── BOOK PREVIEW FLIPBOOK ── */
+  .section-book-preview {
+    background: var(--cream);
+    padding: 100px 40px;
+  }
+  .book-preview-label { margin-bottom: 0; }
+
+  .flipbook-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    margin: 0 auto;
+    max-width: 900px;
+  }
+
+  .flipbook {
+    width: 720px;
+    height: 460px;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .spread {
+    position: absolute;
+    inset: 0;
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.18);
+    border-radius: 4px;
+    overflow: hidden;
+    animation: fadeSpread 0.4s ease;
+  }
+  @keyframes fadeSpread {
+    from { opacity: 0; transform: scale(0.98); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  .spread.active {
+    display: grid;
+  }
+
+  @media (max-width: 800px) {
+    .flipbook-wrapper { gap: 12px; }
+    .flipbook { width: calc(100vw - 120px); height: auto; min-height: 320px; }
+    .spread { position: relative; inset: auto; display: none; grid-template-columns: 1fr; }
+    .spread.active { display: grid; }
+    .page { padding: 20px 16px; }
+    .page-left { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.08); }
+  }
+
+  .page {
+    padding: 36px 30px;
+    background: #FEFCF9;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-left {
+    border-right: 1px solid rgba(0,0,0,0.08);
+    background: #FEFCF9;
+  }
+  .page-right { background: #FFFDF9; }
+
+  /* Cover pages */
+  .page-cover-front {
+    background: var(--green);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--cream);
+  }
+  .cover-badge { font-size: 40px; margin-bottom: 12px; }
+  .cover-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px;
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1;
+  }
+  .cover-subtitle {
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    color: var(--sage);
+    margin-top: 6px;
+  }
+  .cover-year {
+    font-size: 12px;
+    color: rgba(250,247,242,0.5);
+    margin-top: 24px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .cover-stripe {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 6px;
+    background: var(--gold);
+  }
+  .page-cover-back {
+    background: #F5F0E8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cover-back-text {
+    text-align: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 2;
+  }
+  .cover-back-text strong { color: var(--green); font-size: 18px; }
+  .cover-back-text span { font-size: 12px; }
+
+  /* Content pages */
+  .page-day-badge {
+    display: inline-block;
+    background: var(--green);
+    color: var(--cream);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+  }
+  .contrib-badge { background: var(--gold) !important; color: #1a1a1a !important; }
+
+  .page-question {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .page-answer {
+    font-size: 13px;
+    color: #2D3748;
+    line-height: 1.75;
+    margin-bottom: 14px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .page-meta {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-style: italic;
+    border-top: 1px solid rgba(0,0,0,0.07);
+    padding-top: 10px;
+  }
+  .page-contributor-note {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-top: 14px;
+    background: rgba(64, 145, 108, 0.06);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  .contrib-avatar { font-size: 20px; flex-shrink: 0; }
+  .contrib-text { font-size: 11px; color: #4A5568; line-height: 1.6; }
+  .contrib-text strong { color: var(--green); }
+
+  /* Photo page */
+  .page-photo-right { display: flex; flex-direction: column; justify-content: center; }
+  .page-photo-frame {
+    background: #F0EBE0;
+    border-radius: 4px;
+    padding: 16px;
+    margin-bottom: 12px;
+    aspect-ratio: 4/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .page-photo-placeholder {
+    text-align: center;
+    color: var(--text-muted);
+  }
+  .photo-icon { font-size: 36px; margin-bottom: 8px; }
+  .photo-label { font-size: 12px; font-style: italic; }
+  .page-photo-caption {
+    font-family: 'Caveat', cursive;
+    font-size: 15px;
+    color: var(--green);
+    text-align: center;
+  }
+
+  /* Milestone page */
+  .page-milestone {
+    background: var(--green);
+    color: var(--cream);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .milestone-month {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 8px;
+  }
+  .milestone-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .milestone-date {
+    font-size: 13px;
+    color: rgba(250,247,242,0.6);
+    margin-bottom: 20px;
+  }
+  .milestone-divider {
+    width: 40px; height: 2px;
+    background: var(--gold);
+    margin-bottom: 20px;
+  }
+  .milestone-stats {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  .mstat { text-align: center; }
+  .mstat-num {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--gold);
+  }
+  .mstat-label { font-size: 10px; color: rgba(250,247,242,0.5); }
+  .milestone-quote {
+    font-family: 'Caveat', cursive;
+    font-size: 14px;
+    color: var(--sage);
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* Weekly recap page */
+  .page-weekly {
+    background: #F8F4EE;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .weekly-header {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .weekly-body {
+    font-size: 13px;
+    color: #4A5568;
+    line-height: 1.75;
+    font-style: italic;
+    margin-bottom: 14px;
+  }
+  .weekly-footer {
+    font-size: 10px;
+    color: var(--text-muted);
+    border-top: 1px solid rgba(0,0,0,0.08);
+    padding-top: 10px;
+  }
+
+  /* Last pages */
+  .page-last {
+    background: var(--green);
+    color: var(--cream);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .last-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 72px;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .last-text { font-size: 14px; color: var(--sage); margin-bottom: 20px; }
+  .last-divider { width: 40px; height: 2px; background: var(--gold); margin: 0 auto 20px; }
+  .last-quote {
+    font-family: 'Caveat', cursive;
+    font-size: 15px;
+    color: rgba(250,247,242,0.8);
+    line-height: 1.7;
+    font-style: italic;
+    max-width: 240px;
+  }
+  .last-sig { font-size: 13px; color: var(--sage); margin-top: 16px; }
+
+  .page-backcover {
+    background: #1a2e1a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .backcover-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 10px;
+  }
+  .backcover-tagline {
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    color: var(--sage);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .backcover-url {
+    font-size: 11px;
+    color: rgba(250,247,242,0.35);
+    letter-spacing: 1px;
+  }
+
+  /* Flip controls */
+  .flip-btn {
+    background: var(--green);
+    color: var(--cream);
+    border: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    flex-shrink: 0;
+  }
+  .flip-btn:hover { background: var(--sage); transform: scale(1.08); }
+  .flip-btn:disabled { background: #ccc; cursor: default; transform: none; }
+
+  .flip-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 28px;
+  }
+  .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #D1D5DB;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .dot.active { background: var(--green); transform: scale(1.3); }
+
+  /* ── VIDEO MAKING SECTION ── */
+  .section-video-making {
+    background: var(--green);
+    padding: 100px 40px;
+  }
+  .video-making-inner { max-width: 800px; margin: 0 auto; }
+
+  .video-container {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    max-width: 680px;
+    margin: 0 auto;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.4);
+  }
+
+  .video-cinematic {
+    background: #0F1A12;
+    height: 380px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .scene {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  .scene.active { display: flex; opacity: 1; }
+
+  .scene-caption {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    font-style: italic;
+    letter-spacing: 0.5px;
+    position: absolute;
+    bottom: 24px;
+    text-align: center;
+  }
+
+  /* Scene 1 — phone */
+  .scene-phone {
+    width: 200px;
+    background: #1a1a2e;
+    border-radius: 24px;
+    padding: 20px 16px;
+    border: 2px solid rgba(255,255,255,0.1);
+  }
+  .scene-phone-screen { display: flex; flex-direction: column; gap: 10px; }
+  .scene-msg {
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 12px;
+    line-height: 1.5;
+    max-width: 90%;
+  }
+  .scene-msg.incoming {
+    background: #1B4332;
+    color: rgba(250,247,242,0.9);
+    align-self: flex-start;
+  }
+  .scene-msg.outgoing {
+    background: #25D366;
+    color: #1a1a1a;
+    align-self: flex-end;
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    justify-content: center;
+    min-width: 60px;
+  }
+  .typing-dot {
+    width: 6px; height: 6px;
+    background: rgba(0,0,0,0.4);
+    border-radius: 50%;
+    animation: typingBounce 1.4s infinite ease-in-out;
+  }
+  .typing-dot:nth-child(1) { animation-delay: 0s; }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typingBounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-5px); }
+  }
+
+  /* Scene 2 — server */
+  .scene-server {
+    text-align: center;
+    color: var(--cream);
+  }
+  .scene-server-icon { font-size: 48px; margin-bottom: 16px; }
+  .scene-server-text { font-size: 14px; color: rgba(250,247,242,0.8); margin-bottom: 20px; line-height: 1.6; }
+  .scene-progress {
+    width: 200px;
+    height: 4px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 2px;
+    overflow: hidden;
+    margin: 0 auto;
+  }
+  .scene-progress-bar {
+    height: 100%;
+    background: #25D366;
+    border-radius: 2px;
+    animation: progressFill 2s ease-in-out infinite;
+  }
+  @keyframes progressFill {
+    0% { width: 0%; }
+    70% { width: 100%; }
+    100% { width: 100%; }
+  }
+
+  /* Scene 3 — book building */
+  .scene-book-building {
+    position: relative;
+    width: 240px;
+    height: 160px;
+  }
+  .scene-page {
+    position: absolute;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.8);
+  }
+  .scene-p1 { top: 0; left: 0; animation: floatIn 0.5s ease 0s both; }
+  .scene-p2 { top: 0; right: 0; animation: floatIn 0.5s ease 0.15s both; }
+  .scene-p3 { bottom: 30px; left: 20px; animation: floatIn 0.5s ease 0.3s both; }
+  .scene-p4 { bottom: 30px; right: 20px; animation: floatIn 0.5s ease 0.45s both; }
+  .scene-book-forming {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 40px;
+    animation: bookPop 0.5s ease 0.7s both;
+  }
+  @keyframes floatIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes bookPop {
+    from { opacity: 0; transform: translateX(-50%) scale(0.5); }
+    to { opacity: 1; transform: translateX(-50%) scale(1); }
+  }
+
+  /* Scene 4 — delivery */
+  .scene-delivery { text-align: center; color: var(--cream); }
+  .scene-box { font-size: 56px; margin-bottom: 16px; animation: boxBounce 1s ease infinite alternate; }
+  @keyframes boxBounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-10px); }
+  }
+  .scene-delivery-text { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+  .scene-delivery-sub { font-size: 13px; color: rgba(250,247,242,0.5); }
+
+  /* Play overlay */
+  .video-play-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+    z-index: 10;
+  }
+  .video-play-overlay:hover { background: rgba(0,0,0,0.45); }
+  .video-play-overlay.hidden { display: none; }
+  .play-btn-big {
+    width: 72px; height: 72px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: var(--green);
+    margin-bottom: 12px;
+    transition: transform 0.2s;
+  }
+  .video-play-overlay:hover .play-btn-big { transform: scale(1.08); }
+  .play-label { color: rgba(255,255,255,0.9); font-size: 14px; letter-spacing: 0.5px; }
+
+  /* ── VIDEO GROWN SECTION ── */
+  .section-video-grown {
+    background: var(--cream);
+    padding: 100px 40px;
+  }
+  .video-grown-inner { max-width: 800px; margin: 0 auto; }
+
+  .video-cinematic-dark {
+    background: #0A0A0F;
+  }
+
+  /* Grown scenes */
+  .grown-scene-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px;
+    gap: 16px;
+  }
+  .grown-icon { font-size: 64px; }
+  .grown-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    color: rgba(255,255,255,0.9);
+    font-style: italic;
+  }
+  .grown-subtext { font-size: 14px; color: rgba(255,255,255,0.45); }
+
+  .grown-book-open {
+    max-width: 440px;
+    text-align: center;
+  }
+  .grown-page-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    color: rgba(255,255,255,0.92);
+    font-style: italic;
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+  .grown-page-sig {
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.5px;
+  }
+
+  .grown-final { text-align: center; }
+  .grown-final-icon { font-size: 52px; margin-bottom: 20px; }
+  .grown-final-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    color: rgba(255,255,255,0.88);
+    font-style: italic;
+    line-height: 1.8;
+    max-width: 400px;
+  }
+
+  .video-container-grown { border-radius: 16px; }
+
+  .grown-cta {
+    text-align: center;
+    margin-top: 48px;
+  }
+  .grown-cta-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-bottom: 24px;
+  }
+
   /* ── ANIMATIONS ── */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(24px); }
@@ -1157,7 +1788,7 @@
       <span class="book-price-sub">MXN por libro · envío incluido</span>
     </div>
     <br>
-    <button class="btn-outline-light">Ver ejemplo del libro</button>
+    <button class="btn-outline-light" onclick="document.getElementById('book-preview').scrollIntoView({behavior:'smooth'});setTimeout(function(){window.goToSpread&&goToSpread(1);},600);">Ver ejemplo del libro ↓</button>
   </div>
   <div class="book-visual">
     <div class="book-3d">
@@ -1167,6 +1798,235 @@
         <div class="book-cover-sub">Mi primer año</div>
         <div class="book-cover-year">2024 — 2025</div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOK PREVIEW FLIPTHROUGH -->
+<section id="book-preview" class="section-book-preview">
+  <div class="book-preview-label">
+    <div class="section-label" style="justify-content:center;">Así se ve por dentro</div>
+    <h2 class="section-title" style="text-align:center;margin:0 auto 16px;">Cada página,<br><em>un recuerdo real.</em></h2>
+    <p style="text-align:center;color:var(--text-muted);font-size:15px;margin-bottom:48px;">Toca las flechas para hojear el libro de Sofía</p>
+  </div>
+
+  <div class="flipbook-wrapper">
+    <button class="flip-btn flip-prev" onclick="flipPage(-1)">&#8592;</button>
+
+    <div class="flipbook" id="flipbook">
+      <!-- SPREAD 0: Cover -->
+      <div class="spread active" data-spread="0">
+        <div class="page page-left page-cover-back">
+          <div class="cover-back-text">Este libro pertenece a<br><strong>Sofía García Mendoza</strong><br><span>Nacida el 3 de abril de 2024</span></div>
+        </div>
+        <div class="page page-right page-cover-front">
+          <div class="cover-badge">👣</div>
+          <div class="cover-name">Sofía</div>
+          <div class="cover-subtitle">Mi primer año</div>
+          <div class="cover-year">2024 — 2025</div>
+          <div class="cover-stripe"></div>
+        </div>
+      </div>
+
+      <!-- SPREAD 1: Day 1 memory -->
+      <div class="spread" data-spread="1">
+        <div class="page page-left">
+          <div class="page-day-badge">Día 1</div>
+          <div class="page-question">"¿Cómo fue el momento exacto en que la viste por primera vez?"</div>
+          <div class="page-answer">"Lloré muchísimo. No podía creer que era real. Olía a cielo. Le conté los deditos tres veces para asegurarme de que estaba bien. Papá también lloraba aunque jura que no."</div>
+          <div class="page-meta">— Mamá, 3 de abril de 2024 · 9:14 am</div>
+        </div>
+        <div class="page page-right page-photo-right">
+          <div class="page-photo-frame">
+            <div class="page-photo-placeholder">
+              <div class="photo-icon">📸</div>
+              <div class="photo-label">Primera hora de vida</div>
+            </div>
+          </div>
+          <div class="page-photo-caption">"La foto que nunca voy a olvidar"</div>
+        </div>
+      </div>
+
+      <!-- SPREAD 2: Month 1 milestone -->
+      <div class="spread" data-spread="2">
+        <div class="page page-left page-milestone">
+          <div class="milestone-month">Mes 1</div>
+          <div class="milestone-title">Primera sonrisa</div>
+          <div class="milestone-date">1 de mayo de 2024</div>
+          <div class="milestone-divider"></div>
+          <div class="milestone-stats">
+            <div class="mstat"><span class="mstat-num">4.2</span><span class="mstat-label">kg</span></div>
+            <div class="mstat"><span class="mstat-num">54</span><span class="mstat-label">cm</span></div>
+            <div class="mstat"><span class="mstat-num">31</span><span class="mstat-label">memorias</span></div>
+          </div>
+          <div class="milestone-quote">"Este mes aprendí que dormir es un lujo y que los bebés no leen las guías de crianza."</div>
+        </div>
+        <div class="page page-right">
+          <div class="page-day-badge">Día 28</div>
+          <div class="page-question">"¿Cuál fue el momento más difícil de este primer mes?"</div>
+          <div class="page-answer">"La noche del martes 23. Lloraste tres horas seguidas y yo también lloré. Le mandé mensaje a mi mamá a las 3am y llegó en 20 minutos. Nunca la quise tanto."</div>
+          <div class="page-meta">— Mamá, 30 de abril de 2024</div>
+          <div class="page-contributor-note">
+            <div class="contrib-avatar">👵</div>
+            <div class="contrib-text"><strong>Abuela Carmen:</strong> "Esa noche también vi mi primer mensaje de Huellas. Respondí desde la cocina mientras hacía atole para llevarles."</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPREAD 3: Papá's message -->
+      <div class="spread" data-spread="3">
+        <div class="page page-left">
+          <div class="page-day-badge contrib-badge">Papá · Día 7</div>
+          <div class="page-question">"¿Qué pensaste la primera vez que la cargaste solo?"</div>
+          <div class="page-answer">"Que era la cosa más frágil que había tocado en mi vida. Le hablé bajito para no asustarla. Le prometí que siempre iba a estar. No sé si me entendió pero yo sí me entendí a mí."</div>
+          <div class="page-meta">— Papá Roberto, 10 de abril de 2024</div>
+        </div>
+        <div class="page page-right page-weekly">
+          <div class="weekly-header">✨ Resumen Semana 1</div>
+          <div class="weekly-body">"Qué semana tan intensa y hermosa. Sofía llegó al mundo con 3.1 kg de pura ternura. Mamá respondió 7 preguntas, papá 3, y abuela Carmen ya está en el grupo. Los recuerdos de esta semana hablan de asombro, de miedo convertido en amor, y de una familia que acaba de cambiar para siempre."</div>
+          <div class="weekly-footer">— Generado por IA · Semana del 3–10 abril 2024</div>
+        </div>
+      </div>
+
+      <!-- SPREAD 4: Back cover -->
+      <div class="spread" data-spread="4">
+        <div class="page page-left page-last">
+          <div class="last-num">365</div>
+          <div class="last-text">memorias guardadas</div>
+          <div class="last-divider"></div>
+          <div class="last-quote">"Un día, cuando Sofía tenga 15 años y le cueste hablar contigo, dale este libro. Ahí está todo lo que sentiste cuando apenas empezaba."</div>
+          <div class="last-sig">— Huellas 👣</div>
+        </div>
+        <div class="page page-right page-backcover">
+          <div class="backcover-logo">👣 Huellas</div>
+          <div class="backcover-tagline">Lindos recuerdos,<br>un WhatsApp a la vez.</div>
+          <div class="backcover-url">mihuellas.mx</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="flip-btn flip-next" onclick="flipPage(1)">&#8594;</button>
+  </div>
+
+  <div class="flip-dots" id="flipDots">
+    <span class="dot active" onclick="goToSpread(0)"></span>
+    <span class="dot" onclick="goToSpread(1)"></span>
+    <span class="dot" onclick="goToSpread(2)"></span>
+    <span class="dot" onclick="goToSpread(3)"></span>
+    <span class="dot" onclick="goToSpread(4)"></span>
+  </div>
+
+  <div style="text-align:center;margin-top:40px;">
+    <a href="#signup" class="btn-primary" style="display:inline-block;">Empieza el diario de tu bebé →</a>
+  </div>
+</section>
+
+<!-- EMOTIONAL VIDEO SECTION 1: How the book is made -->
+<section class="section-video-making">
+  <div class="video-making-inner">
+    <div class="section-label" style="justify-content:center;color:var(--sage);">Así nace el libro</div>
+    <h2 class="section-title" style="text-align:center;margin:0 auto 16px;color:var(--cream);">De un WhatsApp<br><em>a una obra de arte.</em></h2>
+    <p style="text-align:center;color:rgba(250,247,242,0.65);font-size:15px;margin-bottom:48px;max-width:480px;margin-left:auto;margin-right:auto;">Cada mensaje que mandas se convierte en una página. Cada foto, en un recuerdo que dura para siempre.</p>
+
+    <div class="video-container" id="videoMaking">
+      <div class="video-cinematic">
+        <!-- Animated scenes cycling through book creation process -->
+        <div class="scene scene-1 active">
+          <div class="scene-phone">
+            <div class="scene-phone-screen">
+              <div class="scene-msg incoming">☀️ Día 47 de 365<br><br><em>"¿Cuál fue la primera vez que Sofía reconoció tu cara?"</em></div>
+              <div class="scene-msg outgoing typing">
+                <span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>
+              </div>
+            </div>
+          </div>
+          <div class="scene-caption">Mamá responde en 30 segundos desde la cocina</div>
+        </div>
+        <div class="scene scene-2">
+          <div class="scene-server">
+            <div class="scene-server-icon">🔐</div>
+            <div class="scene-server-text">Guardando recuerdo #47<br>de Sofía…</div>
+            <div class="scene-progress"><div class="scene-progress-bar"></div></div>
+          </div>
+          <div class="scene-caption">Tu recuerdo queda protegido para siempre</div>
+        </div>
+        <div class="scene scene-3">
+          <div class="scene-book-building">
+            <div class="scene-page scene-p1">📝 Día 1</div>
+            <div class="scene-page scene-p2">📸 Foto</div>
+            <div class="scene-page scene-p3">🎙️ Voz</div>
+            <div class="scene-page scene-p4">👨‍👩‍👧 Familia</div>
+            <div class="scene-book-forming">📚</div>
+          </div>
+          <div class="scene-caption">365 memorias se organizan en tu libro</div>
+        </div>
+        <div class="scene scene-4">
+          <div class="scene-delivery">
+            <div class="scene-box">📦</div>
+            <div class="scene-delivery-text">Tu libro de Sofía<br>en camino a casa</div>
+            <div class="scene-delivery-sub">Entrega estimada: 7 días</div>
+          </div>
+          <div class="scene-caption">Impresión premium · Envío a todo México</div>
+        </div>
+      </div>
+      <div class="video-play-overlay" id="playOverlay1" onclick="startVideo('videoMaking','playOverlay1')">
+        <div class="play-btn-big">▶</div>
+        <div class="play-label">Ver cómo se hace el libro</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EMOTIONAL VIDEO SECTION 2: Grown child reads memories -->
+<section class="section-video-grown">
+  <div class="video-grown-inner">
+    <div class="section-label" style="justify-content:center;">El momento que importa</div>
+    <h2 class="section-title" style="text-align:center;margin:0 auto 24px;">El día que tu hijo<br><em>lo lea todo.</em></h2>
+
+    <div class="video-container video-container-grown" id="videoGrown">
+      <div class="video-cinematic video-cinematic-dark">
+        <!-- Emotional story: teenager finds the book -->
+        <div class="scene scene-grown-1 active">
+          <div class="grown-scene-content">
+            <div class="grown-icon">📚</div>
+            <div class="grown-text">15 años después…</div>
+            <div class="grown-subtext">Sofía encuentra un libro en el librero de su cuarto</div>
+          </div>
+        </div>
+        <div class="scene scene-grown-2">
+          <div class="grown-scene-content">
+            <div class="grown-book-open">
+              <div class="grown-page-text">"Lloré muchísimo. No podía creer que eras real. Olías a cielo."</div>
+              <div class="grown-page-sig">— Mamá, cuando tenías 2 horas de nacida</div>
+            </div>
+          </div>
+        </div>
+        <div class="scene scene-grown-3">
+          <div class="grown-scene-content">
+            <div class="grown-book-open">
+              <div class="grown-page-text">"Le prometí que siempre iba a estar. No sé si me entendiste pero yo sí me entendí a mí."</div>
+              <div class="grown-page-sig">— Papá Roberto, cuando tenías 7 días de nacida</div>
+            </div>
+          </div>
+        </div>
+        <div class="scene scene-grown-4">
+          <div class="grown-scene-content">
+            <div class="grown-final">
+              <div class="grown-final-icon">👣</div>
+              <div class="grown-final-text">Los recuerdos que hoy guardas…<br>son el amor que ella sentirá mañana.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="video-play-overlay" id="playOverlay2" onclick="startVideo('videoGrown','playOverlay2')">
+        <div class="play-btn-big">▶</div>
+        <div class="play-label">Ver la historia de Sofía</div>
+      </div>
+    </div>
+
+    <div class="grown-cta">
+      <p class="grown-cta-text">Empieza hoy. En 365 días, tendrás un libro como este.</p>
+      <a href="#signup" class="btn-primary">Guardar los primeros recuerdos →</a>
     </div>
   </div>
 </section>
@@ -1331,5 +2191,113 @@ document.querySelectorAll('.cta-btn-primary, .footer-cta-form button, .pricing-c
 });
 </script>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+  // ── FLIPBOOK ───────────────────────────────────────────────
+  let currentSpread = 0;
+  const totalSpreads = 5;
+  const spreads = document.querySelectorAll('.spread');
+  const dots = document.querySelectorAll('.dot');
+  const prevBtn = document.querySelector('.flip-prev');
+  const nextBtn = document.querySelector('.flip-next');
+
+  function goToSpread(n) {
+    spreads[currentSpread].classList.remove('active');
+    dots[currentSpread].classList.remove('active');
+    currentSpread = Math.max(0, Math.min(n, totalSpreads - 1));
+    spreads[currentSpread].classList.add('active');
+    dots[currentSpread].classList.add('active');
+    if (prevBtn) prevBtn.disabled = currentSpread === 0;
+    if (nextBtn) nextBtn.disabled = currentSpread === totalSpreads - 1;
+  }
+
+  window.flipPage = function(dir) { goToSpread(currentSpread + dir); };
+  window.goToSpread = goToSpread;
+
+  // Init flipbook
+  if (spreads.length) {
+    spreads.forEach(s => s.classList.remove('active'));
+    spreads[0].classList.add('active');
+    if (prevBtn) prevBtn.disabled = true;
+  }
+
+  // ── VIDEO SCENES — AUTO-PLAY, NO OVERLAY ──────────────────
+  function runVideoLoop(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const scenes = container.querySelectorAll('.scene');
+    if (!scenes.length) return;
+
+    // Remove overlay completely
+    const overlay = container.querySelector('.video-play-overlay');
+    if (overlay) overlay.remove();
+
+    // Make sure first scene visible
+    scenes.forEach(s => s.classList.remove('active'));
+    scenes[0].classList.add('active');
+
+    let cur = 0;
+    function nextScene() {
+      scenes[cur].classList.remove('active');
+      cur = (cur + 1) % scenes.length;
+      scenes[cur].classList.add('active');
+    }
+    setInterval(nextScene, 3000);
+  }
+
+  // Auto-start both videos when they scroll into view
+  const videoObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        runVideoLoop(entry.target.id);
+        videoObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  const vm = document.getElementById('videoMaking');
+  const vg = document.getElementById('videoGrown');
+  if (vm) videoObserver.observe(vm);
+  if (vg) videoObserver.observe(vg);
+
+  // Also keep click-to-play as fallback
+  window.startVideo = function(containerId, overlayId) {
+    const overlay = document.getElementById(overlayId);
+    if (overlay) overlay.classList.add('hidden');
+    runVideoLoop(containerId);
+  };
+
+  // ── FAQ ACCORDION ──────────────────────────────────────────
+  document.querySelectorAll('.faq-item').forEach(item => {
+    const q = item.querySelector('.faq-q');
+    if (q) {
+      q.addEventListener('click', () => {
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+      });
+    }
+  });
+
+  // ── WAITLIST FORM ──────────────────────────────────────────
+  document.querySelectorAll('.footer-cta-form, .hero-cta-group').forEach(form => {
+    const btn = form.querySelector('button');
+    const input = form.querySelector('input[type="tel"], input[type="text"]');
+    if (btn && input) {
+      btn.addEventListener('click', () => {
+        if (input.value.trim()) {
+          btn.textContent = '¡Listo! Te avisamos pronto 💚';
+          btn.style.background = '#40916C';
+          input.value = '';
+          input.disabled = true;
+          btn.disabled = true;
+        }
+      });
+    }
+  });
+
+});
+</script>
 </body>
 </html>
