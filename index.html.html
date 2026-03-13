@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Huellas — Lindos recuerdos, un WhatsApp a la vez</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Caveat:wght@500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --cream: #FAF7F2;
+    --cream-dark: #F0EBE1;
+    --ink: #1C2B1A;
+    --green: #2D5016;
+    --green-mid: #3D6B20;
+    --green-light: #6A9B3A;
+    --sage: #A8C17C;
+    --gold: #C9943A;
+    --warm-white: #FFFDF8;
+    --text-muted: #6B6355;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 48px;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(250, 247, 242, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(45, 80, 22, 0.08);
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--green);
+    letter-spacing: -0.5px;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .nav-logo span {
+    font-family: 'Caveat', cursive;
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .nav-cta {
+    background: var(--green);
+    color: var(--cream);
+    border: none;
+    padding: 10px 24px;
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    letter-spacing: 0.2px;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .nav-cta:hover { background: var(--green-mid); transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg-circle {
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(168, 193, 124, 0.18) 0%, transparent 70%);
+    border-radius: 50%;
+    top: -100px; right: -100px;
+    pointer-events: none;
+  }
+
+  .hero-bg-dots {
+    position: absolute;
+    bottom: 60px; left: 40px;
+    width: 180px; height: 180px;
+    background-image: radial-gradient(circle, rgba(45,80,22,0.12) 1.5px, transparent 1.5px);
+    background-size: 18px 18px;
+    pointer-events: none;
+  }
+
+  .hero-left {
+    padding: 80px 48px 80px 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    color: var(--green-light);
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 24px; height: 1px;
+    background: var(--green-light);
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(44px, 5.5vw, 72px);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--green);
+    font-weight: 400;
+  }
+
+  .hero-tagline {
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    color: var(--gold);
+    margin-bottom: 28px;
+    font-weight: 500;
+  }
+
+  .hero-desc {
+    font-size: 16px;
+    color: var(--text-muted);
+    max-width: 420px;
+    margin-bottom: 40px;
+    line-height: 1.75;
+  }
+
+  .hero-cta-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 380px;
+  }
+
+  .cta-input-row {
+    display: flex;
+    background: var(--warm-white);
+    border: 1.5px solid rgba(45, 80, 22, 0.2);
+    border-radius: 100px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .cta-input-row:focus-within { border-color: var(--green); }
+
+  .cta-input-row input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 14px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    outline: none;
+  }
+  .cta-input-row input::placeholder { color: #B5AFA5; }
+
+  .cta-btn-primary {
+    background: var(--green);
+    color: var(--cream);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+    margin: 4px;
+  }
+  .cta-btn-primary:hover { background: var(--green-mid); }
+
+  .hero-social-proof {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .hero-avatars {
+    display: flex;
+  }
+  .hero-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--cream);
+    margin-right: -8px;
+    background: var(--sage);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    color: var(--green);
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .hero-avatar:nth-child(2) { background: #D4B896; }
+  .hero-avatar:nth-child(3) { background: #C4D4A0; }
+  .hero-avatars { margin-right: 14px; }
+
+  /* ── HERO RIGHT — Phone mockup ── */
+  .hero-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 60px 80px 20px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .phone-frame {
+    width: 280px;
+    background: var(--ink);
+    border-radius: 44px;
+    padding: 14px;
+    box-shadow:
+      0 40px 80px rgba(28, 43, 26, 0.25),
+      0 0 0 1px rgba(255,255,255,0.06);
+    position: relative;
+  }
+
+  .phone-screen {
+    background: #ECE5DD;
+    border-radius: 32px;
+    overflow: hidden;
+    min-height: 540px;
+  }
+
+  .phone-status {
+    background: #075E54;
+    padding: 10px 16px 8px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .phone-status-dot {
+    width: 36px; height: 36px;
+    background: var(--sage);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    color: var(--green);
+    font-weight: 500;
+  }
+  .phone-status-info { flex: 1; }
+  .phone-status-name {
+    font-size: 15px;
+    font-weight: 500;
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    line-height: 1.2;
+  }
+  .phone-status-sub {
+    font-size: 11px;
+    color: rgba(255,255,255,0.65);
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .phone-messages {
+    padding: 12px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .msg { max-width: 78%; font-family: 'DM Sans', sans-serif; font-size: 13px; }
+
+  .msg-in {
+    background: #fff;
+    border-radius: 0px 12px 12px 12px;
+    padding: 8px 12px;
+    align-self: flex-start;
+    color: #111;
+    line-height: 1.5;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+    position: relative;
+  }
+
+  .msg-out {
+    background: #DCF8C6;
+    border-radius: 12px 0px 12px 12px;
+    padding: 8px 12px;
+    align-self: flex-end;
+    color: #111;
+    line-height: 1.5;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  }
+
+  .msg-time {
+    font-size: 10px;
+    color: #888;
+    text-align: right;
+    margin-top: 2px;
+    display: block;
+  }
+
+  .msg-emoji { font-size: 18px; display: block; margin-bottom: 2px; }
+
+  .msg-photo {
+    width: 100%;
+    height: 110px;
+    background: linear-gradient(135deg, #D4B896 0%, #C4D4A0 100%);
+    border-radius: 8px;
+    margin-bottom: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+  }
+
+  .typing-indicator {
+    background: #fff;
+    border-radius: 0px 12px 12px 12px;
+    padding: 10px 16px;
+    align-self: flex-start;
+    display: flex; gap: 4px; align-items: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  }
+  .typing-dot {
+    width: 7px; height: 7px;
+    background: #aaa;
+    border-radius: 50%;
+    animation: typingBounce 1.2s ease-in-out infinite;
+  }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typingBounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-5px); }
+  }
+
+  /* floating decorative elements */
+  .leaf-deco {
+    position: absolute;
+    opacity: 0.12;
+    pointer-events: none;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .section-how {
+    background: var(--warm-white);
+    padding: 100px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section-label {
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    color: var(--green-light);
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-label::before {
+    content: ''; display: inline-block;
+    width: 20px; height: 1px;
+    background: var(--green-light);
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 300;
+    color: var(--ink);
+    margin-bottom: 60px;
+    max-width: 560px;
+    line-height: 1.2;
+  }
+  .section-title em { font-style: italic; color: var(--green); }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+    position: relative;
+  }
+
+  .steps-grid::before {
+    content: '';
+    position: absolute;
+    top: 28px; left: calc(16.66% + 20px); right: calc(16.66% + 20px);
+    height: 1px;
+    background: repeating-linear-gradient(90deg, var(--sage) 0, var(--sage) 6px, transparent 6px, transparent 14px);
+    z-index: 0;
+  }
+
+  .step {
+    position: relative;
+    z-index: 1;
+  }
+
+  .step-number {
+    width: 56px; height: 56px;
+    background: var(--cream-dark);
+    border: 1.5px solid rgba(45, 80, 22, 0.15);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--green);
+    margin-bottom: 20px;
+  }
+
+  .step-icon {
+    font-size: 24px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .step-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+
+  .step-desc {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  /* ── WHAT YOU RECEIVE ── */
+  .section-samples {
+    padding: 100px 80px;
+    background: var(--cream);
+    position: relative;
+  }
+
+  .questions-marquee {
+    overflow: hidden;
+    margin: 40px -80px;
+    position: relative;
+  }
+  .questions-marquee::before,
+  .questions-marquee::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 120px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .questions-marquee::before { left: 0; background: linear-gradient(90deg, var(--cream), transparent); }
+  .questions-marquee::after  { right: 0; background: linear-gradient(-90deg, var(--cream), transparent); }
+
+  .marquee-track {
+    display: flex;
+    gap: 16px;
+    width: max-content;
+    animation: marqueeScroll 30s linear infinite;
+    padding: 8px 80px;
+  }
+  @keyframes marqueeScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .marquee-track:hover { animation-play-state: paused; }
+
+  .question-pill {
+    background: var(--warm-white);
+    border: 1px solid rgba(45, 80, 22, 0.12);
+    border-radius: 100px;
+    padding: 10px 20px;
+    white-space: nowrap;
+    font-size: 14px;
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    cursor: default;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .question-pill:hover {
+    background: var(--cream-dark);
+    border-color: rgba(45, 80, 22, 0.25);
+  }
+  .question-pill .q-emoji { margin-right: 6px; }
+
+  /* ── BOOK PREVIEW ── */
+  .section-book {
+    background: var(--green);
+    color: var(--cream);
+    padding: 100px 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section-book::before {
+    content: '';
+    position: absolute;
+    top: -200px; right: -200px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .book-text .section-label { color: var(--sage); }
+  .book-text .section-label::before { background: var(--sage); }
+  .book-text .section-title { color: var(--cream); max-width: 100%; }
+  .book-text .section-title em { color: var(--sage); }
+
+  .book-desc {
+    font-size: 16px;
+    color: rgba(250, 247, 242, 0.72);
+    margin-bottom: 32px;
+    line-height: 1.75;
+  }
+
+  .book-price-tag {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    padding: 12px 20px;
+    margin-bottom: 32px;
+  }
+  .book-price-amount {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 600;
+    color: var(--cream);
+  }
+  .book-price-sub {
+    font-size: 13px;
+    color: rgba(250,247,242,0.55);
+  }
+
+  .btn-outline-light {
+    background: transparent;
+    color: var(--cream);
+    border: 1.5px solid rgba(255,255,255,0.3);
+    padding: 12px 28px;
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-outline-light:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.5);
+  }
+
+  /* Book visual */
+  .book-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .book-3d {
+    position: relative;
+    width: 220px;
+    height: 290px;
+    transform: perspective(800px) rotateY(-15deg);
+    filter: drop-shadow(-20px 20px 40px rgba(0,0,0,0.4));
+  }
+
+  .book-cover {
+    width: 100%; height: 100%;
+    background: linear-gradient(145deg, #FAF7F2 0%, #F0EBE1 100%);
+    border-radius: 4px 12px 12px 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .book-cover::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 18px;
+    background: linear-gradient(90deg, #D4C4A8, #E8DCC8);
+    border-radius: 4px 0 0 4px;
+  }
+
+  .book-cover-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--green);
+    margin-bottom: 6px;
+    margin-left: 12px;
+  }
+  .book-cover-sub {
+    font-family: 'Caveat', cursive;
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-left: 12px;
+    margin-bottom: 20px;
+  }
+  .book-cover-leaf {
+    font-size: 48px;
+    opacity: 0.6;
+    margin-left: 12px;
+  }
+  .book-cover-year {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #B5AFA5;
+    margin-left: 12px;
+    margin-top: 12px;
+  }
+
+  /* ── PRICING ── */
+  .section-pricing {
+    padding: 100px 80px;
+    background: var(--cream-dark);
+    text-align: center;
+  }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    max-width: 780px;
+    margin: 60px auto 0;
+  }
+
+  .pricing-card {
+    background: var(--warm-white);
+    border: 1px solid rgba(45, 80, 22, 0.12);
+    border-radius: 20px;
+    padding: 36px 32px;
+    text-align: left;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .pricing-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(45, 80, 22, 0.1);
+  }
+
+  .pricing-card.featured {
+    background: var(--green);
+    border-color: transparent;
+    color: var(--cream);
+  }
+  .pricing-card.featured .pricing-name { color: var(--sage); }
+  .pricing-card.featured .pricing-price { color: var(--cream); }
+  .pricing-card.featured .pricing-period { color: rgba(250,247,242,0.6); }
+  .pricing-card.featured .pricing-desc { color: rgba(250,247,242,0.7); }
+  .pricing-card.featured .pricing-feature { color: rgba(250,247,242,0.85); border-color: rgba(255,255,255,0.1); }
+  .pricing-card.featured .pricing-feature::before { color: var(--sage); }
+
+  .featured-badge {
+    position: absolute;
+    top: -12px; left: 50%; transform: translateX(-50%);
+    background: var(--gold);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    padding: 4px 14px;
+    border-radius: 100px;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+  }
+
+  .pricing-name {
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    color: var(--green-light);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .pricing-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .pricing-period {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+  }
+  .pricing-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+
+  .pricing-features { list-style: none; margin-bottom: 28px; }
+  .pricing-feature {
+    font-size: 14px;
+    color: var(--ink);
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(45, 80, 22, 0.08);
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .pricing-feature::before { content: '✓'; color: var(--green-light); flex-shrink: 0; font-weight: 500; }
+  .pricing-feature:last-child { border-bottom: none; }
+
+  .pricing-cta {
+    width: 100%;
+    padding: 13px;
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1.5px solid;
+  }
+  .pricing-cta-light {
+    background: transparent;
+    color: var(--green);
+    border-color: rgba(45, 80, 22, 0.25);
+  }
+  .pricing-cta-light:hover { background: var(--cream-dark); border-color: var(--green); }
+
+  .pricing-cta-dark {
+    background: var(--cream);
+    color: var(--green);
+    border-color: transparent;
+  }
+  .pricing-cta-dark:hover { background: var(--cream-dark); }
+
+  /* ── TESTIMONIALS ── */
+  .section-testimonials {
+    padding: 100px 80px;
+    background: var(--warm-white);
+  }
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 60px;
+  }
+
+  .testimonial-card {
+    background: var(--cream);
+    border: 1px solid rgba(45, 80, 22, 0.1);
+    border-radius: 16px;
+    padding: 28px;
+    position: relative;
+  }
+
+  .testimonial-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 64px;
+    color: var(--sage);
+    line-height: 0.5;
+    margin-bottom: 16px;
+  }
+
+  .testimonial-text {
+    font-size: 15px;
+    color: var(--ink);
+    line-height: 1.7;
+    margin-bottom: 20px;
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+  }
+
+  .testimonial-author {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .testimonial-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--sage);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--green);
+  }
+  .testimonial-name { font-size: 14px; font-weight: 500; color: var(--ink); }
+  .testimonial-role { font-size: 12px; color: var(--text-muted); }
+
+  /* ── FAQ ── */
+  .section-faq {
+    padding: 100px 80px;
+    background: var(--cream);
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .faq-item {
+    border-bottom: 1px solid rgba(45, 80, 22, 0.12);
+    padding: 24px 0;
+  }
+
+  .faq-q {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ink);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+  }
+  .faq-q::after {
+    content: '+';
+    font-family: 'DM Sans', sans-serif;
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--green-light);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+    margin-left: 12px;
+  }
+  .faq-item.open .faq-q::after { transform: rotate(45deg); }
+
+  .faq-a {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.75;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding-top 0.3s;
+  }
+  .faq-item.open .faq-a { max-height: 200px; padding-top: 14px; }
+
+  /* ── FOOTER CTA ── */
+  .section-footer-cta {
+    padding: 100px 80px;
+    background: var(--cream-dark);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .footer-cta-bg {
+    position: absolute;
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 600px; height: 400px;
+    background: radial-gradient(ellipse, rgba(168, 193, 124, 0.2) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .footer-cta-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 5vw, 60px);
+    font-weight: 300;
+    color: var(--ink);
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .footer-cta-title em { font-style: italic; color: var(--green); }
+
+  .footer-cta-sub {
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    color: var(--gold);
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  .footer-cta-form {
+    display: flex;
+    gap: 12px;
+    max-width: 420px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .footer-cta-form input {
+    flex: 1;
+    border: 1.5px solid rgba(45, 80, 22, 0.2);
+    background: var(--warm-white);
+    border-radius: 100px;
+    padding: 14px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .footer-cta-form input:focus { border-color: var(--green); }
+  .footer-cta-form input::placeholder { color: #B5AFA5; }
+
+  .footer-cta-form button {
+    background: var(--green);
+    color: var(--cream);
+    border: none;
+    border-radius: 100px;
+    padding: 14px 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .footer-cta-form button:hover { background: var(--green-mid); transform: translateY(-1px); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink);
+    color: rgba(250,247,242,0.6);
+    padding: 48px 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--cream);
+  }
+
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a {
+    color: rgba(250,247,242,0.5);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--cream); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-eyebrow  { animation: fadeUp 0.6s ease both 0.1s; }
+  .hero-title    { animation: fadeUp 0.6s ease both 0.2s; }
+  .hero-tagline  { animation: fadeUp 0.6s ease both 0.3s; }
+  .hero-desc     { animation: fadeUp 0.6s ease both 0.4s; }
+  .hero-cta-group { animation: fadeUp 0.6s ease both 0.5s; }
+  .hero-social-proof { animation: fadeUp 0.6s ease both 0.6s; }
+  .phone-frame   { animation: fadeUp 0.7s ease both 0.3s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .hero { grid-template-columns: 1fr; padding-top: 80px; }
+    .hero-left { padding: 60px 24px 40px; }
+    .hero-right { padding: 0 24px 60px; }
+    .section-how, .section-samples, .section-book,
+    .section-pricing, .section-testimonials, .section-faq,
+    .section-footer-cta, footer { padding: 60px 24px; }
+    .steps-grid, .testimonials-grid { grid-template-columns: 1fr; gap: 32px; }
+    .steps-grid::before { display: none; }
+    .section-book { grid-template-columns: 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
+    .footer-cta-form { flex-direction: column; }
+    footer { flex-direction: column; gap: 20px; text-align: center; }
+    .questions-marquee { margin: 40px -24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    👣 Huellas
+    <span>por WhatsApp</span>
+  </div>
+  <a href="#signup" class="nav-cta">Empieza gratis</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-circle"></div>
+  <div class="hero-bg-dots"></div>
+
+  <div class="hero-left">
+    <div class="hero-eyebrow">El diario de tu bebé</div>
+    <h1 class="hero-title">
+      Cada recuerdo,<br>
+      <em>para siempre.</em>
+    </h1>
+    <p class="hero-tagline">Lindos recuerdos, un WhatsApp a la vez.</p>
+    <p class="hero-desc">
+      Cada día te hacemos una pregunta por WhatsApp. Tú respondes con un mensaje, foto o voz. Nosotros guardamos todo — y cuando quieras, te imprimimos un libro hermoso.
+    </p>
+
+    <div class="hero-cta-group" id="signup">
+      <div class="cta-input-row">
+        <input type="tel" placeholder="Tu número de WhatsApp" />
+        <button class="cta-btn-primary">Comenzar gratis →</button>
+      </div>
+      <div class="hero-social-proof">
+        <div class="hero-avatars">
+          <div class="hero-avatar">ML</div>
+          <div class="hero-avatar">CR</div>
+          <div class="hero-avatar">AP</div>
+        </div>
+        Únete a las primeras mamás en la lista de espera
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="phone-status">
+          <div class="phone-status-dot">H</div>
+          <div class="phone-status-info">
+            <div class="phone-status-name">Huellas 👣</div>
+            <div class="phone-status-sub">en línea</div>
+          </div>
+        </div>
+        <div class="phone-messages">
+          <div class="msg msg-in">
+            <span class="msg-emoji">🌅</span>
+            <strong>Día 1 de 365</strong><br>
+            ¡Bienvenida! ¿Cómo fue el momento exacto en que viste a Sofía por primera vez?
+            <span class="msg-time">9:00 am</span>
+          </div>
+          <div class="msg msg-out">
+            <div class="msg-photo">📸</div>
+            Lloré muchísimo 😭 No podía creer que era real. Olía a cielo...
+            <span class="msg-time">9:14 am ✓✓</span>
+          </div>
+          <div class="msg msg-in">
+            ✅ Guardado. Recuerdo #1 de Sofía archivado para siempre 💚
+            <span class="msg-time">9:14 am</span>
+          </div>
+          <div class="msg msg-in" style="margin-top: 8px;">
+            <span class="msg-emoji">✨</span>
+            <strong>Día 7</strong><br>
+            ¿Ya tiene apodo? ¿Cómo surgió?
+            <span class="msg-time">9:00 am</span>
+          </div>
+          <div class="typing-indicator">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section-how">
+  <div class="section-label">Así funciona</div>
+  <h2 class="section-title">Tan fácil como<br><em>responder un mensaje.</em></h2>
+
+  <div class="steps-grid">
+    <div class="step">
+      <div class="step-number">1</div>
+      <h3 class="step-title">Te escribimos</h3>
+      <p class="step-desc">Cada mañana recibes una pregunta en WhatsApp. Sobre el nacimiento, los primeros pasos, los apodos, las risas — los momentos que se olvidan.</p>
+    </div>
+    <div class="step">
+      <div class="step-number">2</div>
+      <h3 class="step-title">Tú respondes</h3>
+      <p class="step-desc">Con texto, foto o nota de voz. Como responderías a un amigo. No hay app que instalar, no hay formularios. Solo WhatsApp.</p>
+    </div>
+    <div class="step">
+      <div class="step-number">3</div>
+      <h3 class="step-title">Queda para siempre</h3>
+      <p class="step-desc">Guardamos todo automáticamente. Y cuando quieras, te imprimimos un libro hermoso con todas tus memorias, fotos y momentos.</p>
+    </div>
+  </div>
+</section>
+
+<!-- QUESTIONS MARQUEE -->
+<section class="section-samples" style="padding-top: 0;">
+  <div style="padding: 0 0 0 0; text-align: center;">
+    <div class="section-label" style="justify-content: center; margin-bottom: 12px;">365 preguntas únicas</div>
+    <h2 class="section-title" style="margin: 0 auto 0; text-align: center;">Las preguntas que<br><em>no querrás olvidar.</em></h2>
+  </div>
+
+  <div class="questions-marquee">
+    <div class="marquee-track">
+      <span class="question-pill"><span class="q-emoji">🌅</span> ¿Cómo fue el momento en que la viste por primera vez?</span>
+      <span class="question-pill"><span class="q-emoji">😴</span> ¿Cuántas horas duerme hoy? ¿Y tú?</span>
+      <span class="question-pill"><span class="q-emoji">👶</span> ¿Ya tiene apodo? ¿Cómo surgió?</span>
+      <span class="question-pill"><span class="q-emoji">👵</span> ¿Cómo reaccionó la abuelita la primera vez que lo cargó?</span>
+      <span class="question-pill"><span class="q-emoji">😂</span> ¿Cuál fue el momento más gracioso de esta semana?</span>
+      <span class="question-pill"><span class="q-emoji">🎵</span> ¿Qué canción le cantas para dormirlo? ¿Es la misma que a ti?</span>
+      <span class="question-pill"><span class="q-emoji">👣</span> ¿A quién de la familia se parece más?</span>
+      <span class="question-pill"><span class="q-emoji">🍼</span> ¿Ya sonríe de verdad? ¿Cuándo fue la primera vez?</span>
+      <span class="question-pill"><span class="q-emoji">💀</span> ¿Ya le pusieron su lugarcito en el altar?</span>
+      <span class="question-pill"><span class="q-emoji">🎄</span> ¿Cómo pasaron la primera Navidad del bebé?</span>
+      <!-- duplicate for seamless loop -->
+      <span class="question-pill"><span class="q-emoji">🌅</span> ¿Cómo fue el momento en que la viste por primera vez?</span>
+      <span class="question-pill"><span class="q-emoji">😴</span> ¿Cuántas horas duerme hoy? ¿Y tú?</span>
+      <span class="question-pill"><span class="q-emoji">👶</span> ¿Ya tiene apodo? ¿Cómo surgió?</span>
+      <span class="question-pill"><span class="q-emoji">👵</span> ¿Cómo reaccionó la abuelita la primera vez que lo cargó?</span>
+      <span class="question-pill"><span class="q-emoji">😂</span> ¿Cuál fue el momento más gracioso de esta semana?</span>
+      <span class="question-pill"><span class="q-emoji">🎵</span> ¿Qué canción le cantas para dormirlo? ¿Es la misma que a ti?</span>
+      <span class="question-pill"><span class="q-emoji">👣</span> ¿A quién de la familia se parece más?</span>
+      <span class="question-pill"><span class="q-emoji">🍼</span> ¿Ya sonríe de verdad? ¿Cuándo fue la primera vez?</span>
+      <span class="question-pill"><span class="q-emoji">💀</span> ¿Ya le pusieron su lugarcito en el altar?</span>
+      <span class="question-pill"><span class="q-emoji">🎄</span> ¿Cómo pasaron la primera Navidad del bebé?</span>
+    </div>
+  </div>
+</section>
+
+<!-- BOOK SECTION -->
+<section class="section-book">
+  <div class="book-text">
+    <div class="section-label">El libro impreso</div>
+    <h2 class="section-title">Un libro que<br><em>durará generaciones.</em></h2>
+    <p class="book-desc">
+      Cuando quieras, convertimos tus memorias en un libro físico hermoso. Fotos, respuestas, fechas — todo organizado. Un regalo que tu hijo leerá de grande.
+    </p>
+    <div class="book-price-tag">
+      <span class="book-price-amount">$750</span>
+      <span class="book-price-sub">MXN por libro · envío incluido</span>
+    </div>
+    <br>
+    <button class="btn-outline-light">Ver ejemplo del libro</button>
+  </div>
+  <div class="book-visual">
+    <div class="book-3d">
+      <div class="book-cover">
+        <div class="book-cover-leaf">🌿</div>
+        <div class="book-cover-title">Sofía</div>
+        <div class="book-cover-sub">Mi primer año</div>
+        <div class="book-cover-year">2024 — 2025</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section-pricing">
+  <div class="section-label" style="justify-content: center;">Planes</div>
+  <h2 class="section-title" style="margin: 0 auto; text-align: center;">Simple y <em>sin sorpresas.</em></h2>
+
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="pricing-name">Básico</div>
+      <div class="pricing-price">$99</div>
+      <div class="pricing-period">MXN / mes</div>
+      <p class="pricing-desc">Para empezar a guardar recuerdos desde hoy.</p>
+      <ul class="pricing-features">
+        <li class="pricing-feature">1 pregunta diaria por WhatsApp</li>
+        <li class="pricing-feature">Fotos y texto ilimitados</li>
+        <li class="pricing-feature">Resumen semanal</li>
+        <li class="pricing-feature">Hitos mensuales especiales</li>
+      </ul>
+      <button class="pricing-cta pricing-cta-light">Comenzar →</button>
+    </div>
+
+    <div class="pricing-card featured">
+      <div class="featured-badge">⭐ Más popular</div>
+      <div class="pricing-name">Familia</div>
+      <div class="pricing-price">$199</div>
+      <div class="pricing-period">MXN / mes</div>
+      <p class="pricing-desc">Con papá, abuelitos y padrinos incluidos.</p>
+      <ul class="pricing-features">
+        <li class="pricing-feature">Todo lo del plan Básico</li>
+        <li class="pricing-feature">Hasta 5 co-participantes (papá, abuela…)</li>
+        <li class="pricing-feature">Transcripción de notas de voz</li>
+        <li class="pricing-feature">Recaps anuales especiales</li>
+        <li class="pricing-feature">10% descuento en libros impresos</li>
+      </ul>
+      <button class="pricing-cta pricing-cta-dark">Comenzar →</button>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section-testimonials">
+  <div class="section-label">Lo que dicen</div>
+  <h2 class="section-title">Mamás que ya<br><em>están guardando momentos.</em></h2>
+
+  <div class="testimonials-grid">
+    <div class="testimonial-card">
+      <div class="testimonial-quote">"</div>
+      <p class="testimonial-text">Nunca hubiera escrito un diario por mi cuenta. Con Huellas solo respondo cuando puedo, y ya tengo 80 recuerdos de mi Mateo en dos meses.</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar" style="background: #D4B896;">ML</div>
+        <div>
+          <div class="testimonial-name">María Luisa R.</div>
+          <div class="testimonial-role">Mamá de Mateo, 3 meses · CDMX</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-quote">"</div>
+      <p class="testimonial-text">Mi mamá también recibe preguntas y escribe sus memorias de cuando yo nací. Ahora tenemos un diario de tres generaciones.</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar" style="background: #C4D4A0;">CP</div>
+        <div>
+          <div class="testimonial-name">Claudia P.</div>
+          <div class="testimonial-role">Mamá de Valentina, 7 meses · Guadalajara</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-quote">"</div>
+      <p class="testimonial-text">El libro que me imprimieron para el primer cumpleaños de Emilio me hizo llorar. Es el regalo más bonito que le he dado a mi esposo.</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar" style="background: #B8C4E8;">AC</div>
+        <div>
+          <div class="testimonial-name">Andrea C.</div>
+          <div class="testimonial-role">Mamá de Emilio, 13 meses · Monterrey</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section-faq" style="max-width: 100%; padding: 80px 80px;">
+  <div style="max-width: 720px; margin: 0 auto;">
+    <div class="section-label">Preguntas frecuentes</div>
+    <h2 class="section-title">¿Tienes <em>dudas?</em></h2>
+
+    <div class="faq-item">
+      <div class="faq-q">¿Necesito instalar una app?</div>
+      <div class="faq-a">No. Todo funciona por WhatsApp — la app que ya tienes instalada. Nada que descargar, nada que aprender.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">¿Qué pasa si no respondo un día?</div>
+      <div class="faq-a">Absolutamente nada. Puedes responder cuando tengas tiempo, incluso días después. La pregunta te sigue esperando. Somos mamás también — entendemos.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">¿Mis fotos y respuestas están seguras?</div>
+      <div class="faq-a">Sí. Tus datos están encriptados y almacenados de forma segura. Solo tú y las personas que invites tienen acceso. Jamás compartimos ni vendemos tu información.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">¿Puedo cancelar cuando quiera?</div>
+      <div class="faq-a">Sí, sin penalizaciones ni letras chiquitas. Si cancelas, tus recuerdos siguen guardados y puedes descargarlos cuando quieras.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">¿Funciona si mi bebé ya nació hace meses?</div>
+      <div class="faq-a">¡Claro! Puedes empezar en cualquier momento. Simplemente te preguntamos desde donde quieres comenzar y ajustamos las preguntas al mes de tu bebé.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER CTA -->
+<section class="section-footer-cta">
+  <div class="footer-cta-bg"></div>
+  <h2 class="footer-cta-title">Empieza hoy.<br><em>El tiempo vuela.</em></h2>
+  <p class="footer-cta-sub">Primer mes gratis. Sin tarjeta de crédito.</p>
+  <div class="footer-cta-form">
+    <input type="tel" placeholder="Tu WhatsApp" />
+    <button>Comenzar gratis →</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">👣 Huellas</div>
+  <div class="footer-links">
+    <a href="#">Privacidad</a>
+    <a href="#">Términos</a>
+    <a href="#">Contacto</a>
+  </div>
+  <div>© 2025 Huellas · México</div>
+</footer>
+
+<script>
+// FAQ accordion
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  });
+});
+
+// CTA buttons — show confirmation
+document.querySelectorAll('.cta-btn-primary, .footer-cta-form button, .pricing-cta, .nav-cta').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const inputs = document.querySelectorAll('input[type="tel"]');
+    inputs.forEach(inp => {
+      if (inp.value.trim()) {
+        inp.value = '';
+        inp.placeholder = '✓ ¡Te avisamos pronto!';
+        inp.style.color = 'var(--green)';
+      }
+    });
+    btn.textContent = '✓ ¡Listo!';
+    btn.style.background = 'var(--green-mid)';
+  });
+});
+</script>
+
+</body>
+</html>
