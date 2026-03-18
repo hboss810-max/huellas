@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mis Recuerditos — Panel Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #00C170;
+    --green-dim: #00C17022;
+    --green-glow: #00C17044;
+    --bg: #0A0F0D;
+    --bg2: #0F1612;
+    --bg3: #141C18;
+    --border: #1E2E26;
+    --text: #E8F5EF;
+    --text-dim: #6B8F7A;
+    --text-muted: #3D5447;
+    --red: #FF4444;
+    --amber: #FFB800;
+    --blue: #4499FF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+
+  /* Header */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+    backdrop-filter: blur(20px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,15,13,0.9);
+  }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; }
+  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo-dot { width: 10px; height: 10px; background: var(--green); border-radius: 50%; box-shadow: 0 0 12px var(--green); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+  .logo-text { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--text); }
+  .logo-sub { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-dim); letter-spacing: 2px; text-transform: uppercase; }
+  .header-right { display: flex; align-items: center; gap: 16px; }
+  .last-updated { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); }
+  .refresh-btn {
+    background: var(--green-dim);
+    border: 1px solid var(--green);
+    color: var(--green);
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 1px;
+  }
+  .refresh-btn:hover { background: var(--green); color: var(--bg); }
+  .refresh-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* Main layout */
+  main { padding: 32px 0 80px; }
+
+  /* Section titles */
+  .section-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    padding-left: 4px;
+    border-left: 2px solid var(--green);
+    padding-left: 12px;
+  }
+
+  /* Stat cards grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  @media (max-width: 1200px) { .stats-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 600px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: border-color 0.2s, transform 0.2s;
+    animation: fadeUp 0.5s ease both;
+  }
+  .stat-card:hover { border-color: var(--green); transform: translateY(-2px); }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+  .stat-card:nth-child(1) { animation-delay: 0.05s; }
+  .stat-card:nth-child(2) { animation-delay: 0.10s; }
+  .stat-card:nth-child(3) { animation-delay: 0.15s; }
+  .stat-card:nth-child(4) { animation-delay: 0.20s; }
+  .stat-card:nth-child(5) { animation-delay: 0.25s; }
+  .stat-card:nth-child(6) { animation-delay: 0.30s; }
+
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-value.green { color: var(--green); }
+  .stat-value.amber { color: var(--amber); }
+  .stat-value.red { color: var(--red); }
+  .stat-sub { font-size: 12px; color: var(--text-muted); }
+
+  /* Two col layout */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 32px; }
+  @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* Table card */
+  .table-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    animation: fadeUp 0.5s ease 0.3s both;
+  }
+  .table-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .table-title { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; }
+  .table-count { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); }
+
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    text-align: left;
+    padding: 10px 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 12px 20px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--bg3); color: var(--text); }
+
+  .badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .badge-active { background: var(--green-dim); color: var(--green); border: 1px solid var(--green); }
+  .badge-trial { background: rgba(255,184,0,0.1); color: var(--amber); border: 1px solid var(--amber); }
+  .badge-paused { background: rgba(255,68,68,0.1); color: var(--red); border: 1px solid var(--red); }
+  .badge-inactive { background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--text-muted); }
+
+  /* Loading / error states */
+  .loading {
+    display: flex; align-items: center; justify-content: center;
+    padding: 48px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    gap: 12px;
+  }
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid var(--border);
+    border-top-color: var(--green);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .error {
+    padding: 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--red);
+    background: rgba(255,68,68,0.05);
+    border: 1px solid rgba(255,68,68,0.2);
+    border-radius: 8px;
+    margin: 12px 0;
+  }
+
+  /* Activity feed */
+  .feed-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  .feed-item:last-child { border-bottom: none; }
+  .feed-item:hover { background: var(--bg3); }
+  .feed-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); margin-top: 5px; flex-shrink: 0; }
+  .feed-text { font-size: 13px; color: var(--text-dim); flex: 1; }
+  .feed-time { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); flex-shrink: 0; }
+
+  /* Health bar */
+  .health-row { display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-bottom: 1px solid var(--border); }
+  .health-row:last-child { border-bottom: none; }
+  .health-label { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-dim); width: 180px; flex-shrink: 0; }
+  .health-bar-wrap { flex: 1; height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
+  .health-bar { height: 100%; background: var(--green); border-radius: 3px; transition: width 1s ease; }
+  .health-bar.amber { background: var(--amber); }
+  .health-bar.red { background: var(--red); }
+  .health-val { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-dim); width: 40px; text-align: right; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="logo">
+      <div class="logo-dot"></div>
+      <div>
+        <div class="logo-text">Mis Recuerditos</div>
+        <div class="logo-sub">Panel de Control</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <span class="last-updated" id="lastUpdated">—</span>
+      <button class="refresh-btn" id="refreshBtn" onclick="loadAll()">↻ ACTUALIZAR</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <!-- KPI Stats -->
+    <div class="section-title">Métricas Principales</div>
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-card"><div class="stat-label">Familias Totales</div><div class="stat-value" id="s-total">—</div><div class="stat-sub">activas + prueba</div></div>
+      <div class="stat-card"><div class="stat-label">Suscriptores</div><div class="stat-value green" id="s-paying">—</div><div class="stat-sub">pago confirmado</div></div>
+      <div class="stat-card"><div class="stat-label">En Prueba</div><div class="stat-value amber" id="s-trial">—</div><div class="stat-sub">30 días gratis</div></div>
+      <div class="stat-card"><div class="stat-label">Recuerdos Hoy</div><div class="stat-value" id="s-memories-today">—</div><div class="stat-sub">respuestas nuevas</div></div>
+      <div class="stat-card"><div class="stat-label">Registro Hoy</div><div class="stat-value" id="s-signups-today">—</div><div class="stat-sub">nuevas familias</div></div>
+      <div class="stat-card"><div class="stat-label">Pruebas × Vencer</div><div class="stat-value red" id="s-expiring">—</div><div class="stat-sub">próximos 5 días</div></div>
+    </div>
+
+    <!-- Two col: Recent Families + Recent Memories -->
+    <div class="two-col">
+
+      <div class="table-card">
+        <div class="table-header">
+          <span class="table-title">Familias Recientes</span>
+          <span class="table-count" id="families-count">—</span>
+        </div>
+        <div id="families-table"><div class="loading"><div class="spinner"></div> Cargando...</div></div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <span class="table-title">Últimos Recuerdos</span>
+          <span class="table-count" id="memories-count">—</span>
+        </div>
+        <div id="memories-table"><div class="loading"><div class="spinner"></div> Cargando...</div></div>
+      </div>
+
+    </div>
+
+    <!-- Two col: Trials expiring + System Health -->
+    <div class="two-col">
+
+      <div class="table-card">
+        <div class="table-header">
+          <span class="table-title">Pruebas Por Vencer</span>
+          <span class="table-count" id="expiring-count">—</span>
+        </div>
+        <div id="expiring-table"><div class="loading"><div class="spinner"></div> Cargando...</div></div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <span class="table-title">Salud del Sistema</span>
+          <span class="table-count">últimas 24h</span>
+        </div>
+        <div id="health-panel"><div class="loading"><div class="spinner"></div> Cargando...</div></div>
+      </div>
+
+    </div>
+
+  </div>
+</main>
+
+<script>
+const N8N_MCP = 'https://huellas-mx.app.n8n.cloud/mcp-server/http';
+const N8N_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxenBuOWJnV1B6bFFjMHA4R2oxdWlLNkRPVG4iLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIn0.placeholder';
+
+async function runSQL(sql) {
+  try {
+    const resp = await fetch('https://huellas-mx.app.n8n.cloud/webhook/whatsapp-support', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sql })
+    });
+    // Fallback: use Claude Control via n8n MCP
+    throw new Error('Use MCP');
+  } catch(e) {
+    // Use the Claude Control workflow via direct API call simulation
+    return null;
+  }
+}
+
+async function fetchStats() {
+  // We'll use the n8n REST API to trigger Claude Control
+  const queries = {
+    total: "SELECT COUNT(*) as n FROM families WHERE status IN ('active','trial')",
+    paying: "SELECT COUNT(*) as n FROM families WHERE subscription_status = 'active'",
+    trial: "SELECT COUNT(*) as n FROM families WHERE status = 'trial'",
+    memoriesToday: "SELECT COUNT(*) as n FROM memories WHERE created_at >= NOW() - INTERVAL '24 hours'",
+    signupsToday: "SELECT COUNT(*) as n FROM families WHERE created_at >= NOW() - INTERVAL '24 hours'",
+    expiring: "SELECT COUNT(*) as n FROM families WHERE status='trial' AND trial_expires_at BETWEEN NOW() AND NOW() + INTERVAL '5 days'",
+  };
+
+  const results = {};
+  for (const [key, sql] of Object.entries(queries)) {
+    try {
+      const r = await callClaudeControl(sql);
+      results[key] = r?.[0]?.n ?? '?';
+    } catch(e) { results[key] = '?'; }
+  }
+  return results;
+}
+
+async function callClaudeControl(sql) {
+  const resp = await fetch(`https://huellas-mx.app.n8n.cloud/webhook/dashboard-api`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ sql })
+  });
+  if (!resp.ok) throw new Error('HTTP ' + resp.status);
+  const data = await resp.json();
+  return data?.result || data?.data || data;
+}
+
+function timeAgo(dateStr) {
+  const d = new Date(dateStr);
+  const s = Math.floor((Date.now() - d) / 1000);
+  if (s < 60) return `${s}s`;
+  if (s < 3600) return `${Math.floor(s/60)}m`;
+  if (s < 86400) return `${Math.floor(s/3600)}h`;
+  return `${Math.floor(s/86400)}d`;
+}
+
+function statusBadge(status) {
+  const map = { active: 'badge-active', trial: 'badge-trial', paused: 'badge-paused' };
+  return `<span class="badge ${map[status] || 'badge-inactive'}">${status || '—'}</span>`;
+}
+
+async function loadStats() {
+  // Try to get real data
+  try {
+    const r = await fetch('https://huellas-mx.app.n8n.cloud/rest/workflows', {
+      headers: { 'Accept': 'application/json' }
+    });
+    // Just test connectivity
+  } catch(e) {}
+
+  // Show placeholder animation while fetching
+  const els = ['s-total','s-paying','s-trial','s-memories-today','s-signups-today','s-expiring'];
+  els.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = '<span style="color:var(--text-muted)">—</span>';
+  });
+}
+
+async function loadFamilies() {
+  const el = document.getElementById('families-table');
+  try {
+    const data = await callClaudeControl(`SELECT name, phone, status, plan, created_at FROM families ORDER BY created_at DESC LIMIT 8`);
+    if (!data || !data.length) { el.innerHTML = '<div class="loading">Sin datos</div>'; return; }
+    document.getElementById('families-count').textContent = data.length + ' recientes';
+    el.innerHTML = `<table>
+      <tr><th>Nombre</th><th>Plan</th><th>Estado</th><th>Registro</th></tr>
+      ${data.map(f => `<tr>
+        <td style="color:var(--text)">${f.name || '—'}</td>
+        <td><span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--blue)">${f.plan || 'básico'}</span></td>
+        <td>${statusBadge(f.status)}</td>
+        <td>${timeAgo(f.created_at)}</td>
+      </tr>`).join('')}
+    </table>`;
+  } catch(e) {
+    el.innerHTML = `<div class="error">No se pudo conectar con la base de datos.<br>Verifica que el workflow Claude Control está activo.</div>`;
+  }
+}
+
+async function loadMemories() {
+  const el = document.getElementById('memories-table');
+  try {
+    const data = await callClaudeControl(`SELECT f.name as family, b.name as baby, LEFT(m.answer_text, 60) as preview, m.created_at FROM memories m JOIN families f ON f.id=m.family_id LEFT JOIN babies b ON b.family_id=f.id ORDER BY m.created_at DESC LIMIT 8`);
+    if (!data || !data.length) { el.innerHTML = '<div class="loading">Sin datos</div>'; return; }
+    document.getElementById('memories-count').textContent = data.length + ' recientes';
+    el.innerHTML = `<table>
+      <tr><th>Familia</th><th>Bebé</th><th>Respuesta</th><th>Hace</th></tr>
+      ${data.map(m => `<tr>
+        <td style="color:var(--text)">${m.family || '—'}</td>
+        <td style="font-family:'DM Mono',monospace;font-size:11px">${m.baby || '—'}</td>
+        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.preview || '—'}…</td>
+        <td>${timeAgo(m.created_at)}</td>
+      </tr>`).join('')}
+    </table>`;
+  } catch(e) {
+    el.innerHTML = `<div class="error">No se pudo cargar los recuerdos.</div>`;
+  }
+}
+
+async function loadExpiring() {
+  const el = document.getElementById('expiring-table');
+  try {
+    const data = await callClaudeControl(`SELECT name, phone, trial_expires_at, EXTRACT(DAY FROM (trial_expires_at - NOW())) as days_left FROM families WHERE status='trial' AND trial_expires_at IS NOT NULL ORDER BY trial_expires_at ASC LIMIT 10`);
+    if (!data || !data.length) { el.innerHTML = '<div class="loading">Sin pruebas por vencer 🎉</div>'; document.getElementById('expiring-count').textContent = '0'; return; }
+    document.getElementById('expiring-count').textContent = data.length + ' familias';
+    document.getElementById('s-expiring').textContent = data.filter(d => d.days_left <= 5).length;
+    el.innerHTML = `<table>
+      <tr><th>Familia</th><th>Teléfono</th><th>Días Restantes</th></tr>
+      ${data.map(f => {
+        const days = Math.round(f.days_left);
+        const color = days <= 2 ? 'var(--red)' : days <= 5 ? 'var(--amber)' : 'var(--text-dim)';
+        return `<tr>
+          <td style="color:var(--text)">${f.name || '—'}</td>
+          <td style="font-family:'DM Mono',monospace;font-size:11px">${f.phone}</td>
+          <td style="color:${color};font-family:'DM Mono',monospace;font-weight:500">${days}d</td>
+        </tr>`;
+      }).join('')}
+    </table>`;
+  } catch(e) {
+    el.innerHTML = `<div class="error">No se pudo cargar pruebas.</div>`;
+  }
+}
+
+async function loadHealth() {
+  const el = document.getElementById('health-panel');
+  try {
+    const data = await callClaudeControl(`SELECT 
+      (SELECT COUNT(*) FROM memories WHERE created_at >= NOW() - INTERVAL '24 hours') as memories_24h,
+      (SELECT COUNT(*) FROM families WHERE created_at >= NOW() - INTERVAL '24 hours') as signups_24h,
+      (SELECT COUNT(*) FROM families WHERE status IN ('active','trial')) as total_families,
+      (SELECT COUNT(*) FROM families WHERE subscription_status='active') as paying,
+      (SELECT COUNT(*) FROM memories) as total_memories`);
+    const d = data?.[0] || {};
+    const total = d.total_families || 1;
+    const convRate = d.total_families > 0 ? Math.round((d.paying / d.total_families) * 100) : 0;
+    const memRate = Math.min(100, Math.round((d.memories_24h / Math.max(d.total_families, 1)) * 100));
+
+    // Update KPIs
+    document.getElementById('s-total').textContent = d.total_families || '0';
+    document.getElementById('s-paying').textContent = d.paying || '0';
+    document.getElementById('s-memories-today').textContent = d.memories_24h || '0';
+    document.getElementById('s-signups-today').textContent = d.signups_24h || '0';
+
+    el.innerHTML = `
+      <div class="health-row">
+        <span class="health-label">Tasa Conversión</span>
+        <div class="health-bar-wrap"><div class="health-bar ${convRate < 20 ? 'red' : convRate < 40 ? 'amber' : ''}" style="width:${convRate}%"></div></div>
+        <span class="health-val">${convRate}%</span>
+      </div>
+      <div class="health-row">
+        <span class="health-label">Engagement 24h</span>
+        <div class="health-bar-wrap"><div class="health-bar ${memRate < 20 ? 'red' : memRate < 50 ? 'amber' : ''}" style="width:${memRate}%"></div></div>
+        <span class="health-val">${memRate}%</span>
+      </div>
+      <div class="health-row">
+        <span class="health-label">Total Recuerdos</span>
+        <div class="health-bar-wrap"><div class="health-bar" style="width:100%"></div></div>
+        <span class="health-val">${d.total_memories || 0}</span>
+      </div>
+      <div class="health-row">
+        <span class="health-label">Nuevos Registros 24h</span>
+        <div class="health-bar-wrap"><div class="health-bar" style="width:100%"></div></div>
+        <span class="health-val">${d.signups_24h || 0}</span>
+      </div>
+    `;
+  } catch(e) {
+    el.innerHTML = `<div class="error">No se pudo cargar métricas de salud.</div>`;
+  }
+}
+
+async function loadTrialCount() {
+  try {
+    const data = await callClaudeControl(`SELECT COUNT(*) as n FROM families WHERE status='trial'`);
+    document.getElementById('s-trial').textContent = data?.[0]?.n || '0';
+  } catch(e) {}
+}
+
+async function loadAll() {
+  const btn = document.getElementById('refreshBtn');
+  btn.disabled = true;
+  btn.textContent = '↻ CARGANDO...';
+
+  document.getElementById('lastUpdated').textContent = 'Actualizando...';
+
+  await Promise.all([
+    loadFamilies(),
+    loadMemories(),
+    loadExpiring(),
+    loadHealth(),
+    loadTrialCount(),
+  ]);
+
+  const now = new Date();
+  document.getElementById('lastUpdated').textContent = `Actualizado ${now.toLocaleTimeString('es-MX')}`;
+  btn.disabled = false;
+  btn.textContent = '↻ ACTUALIZAR';
+}
+
+// Auto-load on page open
+loadAll();
+// Auto-refresh every 5 minutes
+setInterval(loadAll, 5 * 60 * 1000);
+</script>
+</body>
+</html>
