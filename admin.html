@@ -342,7 +342,7 @@ async function runSQL(sql) {
   try {
     const resp = await fetch('https://huellas-mx.app.n8n.cloud/webhook/whatsapp-support', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'X-Api-Key': 'mr-dash-Xk9p2mF7vQ3nR8sT' },
       body: JSON.stringify({ sql })
     });
     // Fallback: use Claude Control via n8n MCP
@@ -377,7 +377,7 @@ async function fetchStats() {
 async function callClaudeControl(sql) {
   const resp = await fetch(`https://huellas-mx.app.n8n.cloud/webhook/dashboard-api`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'X-Api-Key': 'mr-dash-Xk9p2mF7vQ3nR8sT' },
     body: JSON.stringify({ sql })
   });
   if (!resp.ok) throw new Error('HTTP ' + resp.status);
