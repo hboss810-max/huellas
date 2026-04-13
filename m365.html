@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Microsoft 365 Integration</title>
+<link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ms-blue: #0078d4;
+    --ms-blue-dark: #106ebe;
+    --ms-blue-light: #deecf9;
+    --ms-purple: #5c2d91;
+    --ms-green: #107c10;
+    --ms-red: #d13438;
+    --bg: #faf9f8;
+    --surface: #ffffff;
+    --border: #edebe9;
+    --border-strong: #d2d0ce;
+    --text: #201f1e;
+    --text-secondary: #605e5c;
+    --text-muted: #a19f9d;
+    --radius: 4px;
+    --shadow: 0 1.6px 3.6px rgba(0,0,0,0.06), 0 0.3px 0.9px rgba(0,0,0,0.04);
+    --shadow-lg: 0 6.4px 14.4px rgba(0,0,0,0.13), 0 1.2px 3.6px rgba(0,0,0,0.1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .ms-logo {
+    width: 24px;
+    height: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+  .ms-logo span {
+    display: block;
+  }
+  .ms-logo span:nth-child(1) { background: #f25022; }
+  .ms-logo span:nth-child(2) { background: #7fba00; }
+  .ms-logo span:nth-child(3) { background: #00a4ef; }
+  .ms-logo span:nth-child(4) { background: #ffb900; }
+
+  header h1 {
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .user-chip {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 12px;
+    background: var(--ms-blue-light);
+    border-radius: 20px;
+    font-size: 14px;
+    color: var(--ms-blue-dark);
+  }
+  .user-chip.hidden { display: none; }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+
+  .config-banner {
+    background: #fff4ce;
+    border: 1px solid #e8c547;
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    margin-bottom: 24px;
+    font-size: 14px;
+    color: #323130;
+  }
+  .config-banner strong { color: #8a6914; }
+  .config-banner code {
+    background: rgba(0,0,0,0.06);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-family: 'Consolas', monospace;
+    font-size: 13px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius);
+    display: grid;
+    place-items: center;
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .icon-sso { background: var(--ms-blue); }
+  .icon-cal { background: #0364b8; }
+  .icon-teams { background: #6264a7; }
+
+  .card h2 {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .card p.desc {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+
+  input, textarea, select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: 14px;
+    background: var(--surface);
+    color: var(--text);
+    transition: border-color 0.1s;
+  }
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--ms-blue);
+    box-shadow: 0 0 0 1px var(--ms-blue);
+  }
+  textarea { resize: vertical; min-height: 72px; font-family: 'Consolas', monospace; }
+
+  .field { margin-bottom: 12px; }
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  button {
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 20px;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    cursor: pointer;
+    min-height: 32px;
+    transition: all 0.1s;
+  }
+  .btn-primary {
+    background: var(--ms-blue);
+    color: white;
+  }
+  .btn-primary:hover:not(:disabled) { background: var(--ms-blue-dark); }
+  .btn-primary:disabled { background: var(--text-muted); cursor: not-allowed; }
+
+  .btn-secondary {
+    background: var(--surface);
+    color: var(--text);
+    border-color: var(--border-strong);
+  }
+  .btn-secondary:hover:not(:disabled) { background: var(--bg); }
+
+  .btn-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+
+  .status {
+    margin-top: 12px;
+    padding: 10px 12px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    display: none;
+  }
+  .status.show { display: block; }
+  .status.success { background: #dff6dd; color: var(--ms-green); border: 1px solid #a0d5a0; }
+  .status.error { background: #fde7e9; color: var(--ms-red); border: 1px solid #f1bbbd; }
+  .status.info { background: var(--ms-blue-light); color: var(--ms-blue-dark); border: 1px solid #a6c8e8; }
+
+  .profile {
+    display: none;
+    margin-top: 16px;
+    padding: 16px;
+    background: var(--bg);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+  }
+  .profile.show { display: block; }
+  .profile-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    font-size: 13px;
+  }
+  .profile-row span:first-child { color: var(--text-secondary); font-weight: 600; }
+  .profile-row span:last-child { color: var(--text); font-family: 'Consolas', monospace; }
+
+  footer {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+    padding: 32px 24px;
+  }
+  footer a { color: var(--ms-blue); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="ms-logo" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+  <h1>Microsoft 365 Integration</h1>
+  <div id="userChip" class="user-chip hidden">
+    <span id="userChipName">—</span>
+    <button id="signOutBtn" class="btn-secondary" style="padding: 2px 10px; min-height: auto; font-size: 12px;">Sign out</button>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="config-banner">
+    <strong>Setup:</strong> Edit the <code>M365_CONFIG</code> block at the top of this file's
+    <code>&lt;script&gt;</code> with your Azure AD <code>tenantId</code> / <code>clientId</code> and
+    your Teams incoming webhook URL. Redirect URI in Azure must match this page's URL.
+  </div>
+
+  <div class="grid">
+
+    <!-- ========== SSO ========== -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon icon-sso">M</div>
+        <h2>Sign in with Microsoft</h2>
+      </div>
+      <p class="desc">
+        Authenticate with a Microsoft 365 / Entra ID account using MSAL.js (PKCE).
+        Signed-in user can be used as a gate for admin features.
+      </p>
+      <button id="signInBtn" class="btn-primary">Sign in with Microsoft</button>
+      <div id="ssoStatus" class="status"></div>
+      <div id="profile" class="profile">
+        <div class="profile-row"><span>Name</span><span id="pName">—</span></div>
+        <div class="profile-row"><span>Email</span><span id="pMail">—</span></div>
+        <div class="profile-row"><span>Tenant</span><span id="pTid">—</span></div>
+        <div class="profile-row"><span>Object ID</span><span id="pOid">—</span></div>
+      </div>
+    </div>
+
+    <!-- ========== CALENDAR ========== -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon icon-cal">📅</div>
+        <h2>Outlook / Calendar Export</h2>
+      </div>
+      <p class="desc">
+        Generate a downloadable <code>.ics</code> file or an Outlook Web "Add to Calendar"
+        deep link for any event.
+      </p>
+      <div class="field">
+        <label for="evTitle">Event title</label>
+        <input id="evTitle" type="text" value="Team sync" />
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="evStart">Start</label>
+          <input id="evStart" type="datetime-local" />
+        </div>
+        <div class="field">
+          <label for="evEnd">End</label>
+          <input id="evEnd" type="datetime-local" />
+        </div>
+      </div>
+      <div class="field">
+        <label for="evLocation">Location</label>
+        <input id="evLocation" type="text" value="Microsoft Teams" />
+      </div>
+      <div class="field">
+        <label for="evBody">Description</label>
+        <textarea id="evBody">Weekly team sync meeting.</textarea>
+      </div>
+      <div class="btn-row">
+        <button id="downloadIcs" class="btn-primary">Download .ics</button>
+        <button id="outlookDeeplink" class="btn-secondary">Open in Outlook Web</button>
+      </div>
+      <div id="calStatus" class="status"></div>
+    </div>
+
+    <!-- ========== TEAMS WEBHOOK ========== -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon icon-teams">T</div>
+        <h2>Teams Webhook Notification</h2>
+      </div>
+      <p class="desc">
+        Post an Adaptive Card to a Microsoft Teams channel via an
+        <em>Incoming Webhook</em> connector URL.
+      </p>
+      <div class="field">
+        <label for="whUrl">Incoming webhook URL</label>
+        <input id="whUrl" type="url" placeholder="https://outlook.office.com/webhook/..." />
+      </div>
+      <div class="field">
+        <label for="whTitle">Title</label>
+        <input id="whTitle" type="text" value="New signup" />
+      </div>
+      <div class="field">
+        <label for="whMessage">Message</label>
+        <textarea id="whMessage">A new user just signed up.</textarea>
+      </div>
+      <div class="field">
+        <label for="whColor">Theme color</label>
+        <select id="whColor">
+          <option value="0078D4">Blue</option>
+          <option value="107C10">Green</option>
+          <option value="D13438">Red</option>
+          <option value="FFB900">Amber</option>
+        </select>
+      </div>
+      <div class="btn-row">
+        <button id="sendWebhook" class="btn-primary">Send to Teams</button>
+      </div>
+      <div id="whStatus" class="status"></div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  Built with <a href="https://learn.microsoft.com/azure/active-directory/develop/msal-overview" target="_blank" rel="noopener">MSAL.js</a>
+  · <a href="https://learn.microsoft.com/graph/overview" target="_blank" rel="noopener">Microsoft Graph</a>
+  · <a href="https://learn.microsoft.com/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook" target="_blank" rel="noopener">Teams Webhooks</a>
+</footer>
+
+<!-- MSAL.js browser SDK (v3) -->
+<script src="https://alcdn.msauth.net/browser/3.7.1/js/msal-browser.min.js"
+        integrity="sha384-7sxY5if3wRKte6Gz5w0Vr0Qj6rSvW7Cz5yqxWbPvLhQ0w1LJ5Ej3RPjQF0Ie5HY3"
+        crossorigin="anonymous"></script>
+<script>
+/* =========================================================================
+ * CONFIGURATION — edit these three fields for your Azure AD app + Teams
+ * ========================================================================= */
+const M365_CONFIG = {
+  // Azure AD / Entra ID app registration:
+  // https://entra.microsoft.com → App registrations → New registration
+  // Platform: "Single-page application", Redirect URI = this page's URL.
+  clientId: "00000000-0000-0000-0000-000000000000",
+  // Use "common" for multi-tenant, or your directory (tenant) ID for single-tenant.
+  tenantId: "common",
+  // Graph scopes requested at sign-in.
+  scopes: ["User.Read"],
+
+  // Default Teams incoming webhook URL (the user can override in the form).
+  // Create one: Teams channel → ⋯ → Connectors → Incoming Webhook → Configure.
+  defaultTeamsWebhook: ""
+};
+/* ========================================================================= */
+
+// -------------------- MSAL / SSO --------------------
+const msalConfig = {
+  auth: {
+    clientId: M365_CONFIG.clientId,
+    authority: `https://login.microsoftonline.com/${M365_CONFIG.tenantId}`,
+    redirectUri: window.location.origin + window.location.pathname
+  },
+  cache: { cacheLocation: "sessionStorage", storeAuthStateInCookie: false }
+};
+
+let msal = null;
+try {
+  msal = new msal_browser.PublicClientApplication(msalConfig);
+} catch (e) {
+  console.error("MSAL init failed:", e);
+}
+
+const $ = (id) => document.getElementById(id);
+const show = (el, type, msg) => {
+  el.className = `status show ${type}`;
+  el.textContent = msg;
+};
+const hide = (el) => { el.className = "status"; };
+
+async function initMsal() {
+  if (!msal) return;
+  await msal.initialize();
+  // Handle redirect return (if redirect flow was used)
+  const response = await msal.handleRedirectPromise().catch(() => null);
+  if (response && response.account) {
+    msal.setActiveAccount(response.account);
+  }
+  const accounts = msal.getAllAccounts();
+  if (accounts.length > 0) {
+    msal.setActiveAccount(accounts[0]);
+    await loadProfile();
+  }
+}
+
+async function signIn() {
+  if (!msal) {
+    show($("ssoStatus"), "error", "MSAL failed to load. Check network/CSP.");
+    return;
+  }
+  if (M365_CONFIG.clientId.startsWith("00000000")) {
+    show($("ssoStatus"), "error",
+      "Configure M365_CONFIG.clientId with your Azure AD app's Application (client) ID.");
+    return;
+  }
+  try {
+    hide($("ssoStatus"));
+    const result = await msal.loginPopup({ scopes: M365_CONFIG.scopes, prompt: "select_account" });
+    msal.setActiveAccount(result.account);
+    await loadProfile();
+  } catch (err) {
+    show($("ssoStatus"), "error", `Sign-in failed: ${err.message || err}`);
+  }
+}
+
+async function signOut() {
+  if (!msal) return;
+  const account = msal.getActiveAccount();
+  if (account) {
+    await msal.logoutPopup({ account }).catch(() => {});
+  }
+  $("profile").classList.remove("show");
+  $("userChip").classList.add("hidden");
+  hide($("ssoStatus"));
+}
+
+async function acquireToken() {
+  const account = msal.getActiveAccount();
+  if (!account) throw new Error("No active account");
+  try {
+    const t = await msal.acquireTokenSilent({ scopes: M365_CONFIG.scopes, account });
+    return t.accessToken;
+  } catch {
+    const t = await msal.acquireTokenPopup({ scopes: M365_CONFIG.scopes });
+    return t.accessToken;
+  }
+}
+
+async function loadProfile() {
+  try {
+    const token = await acquireToken();
+    const res = await fetch("https://graph.microsoft.com/v1.0/me", {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!res.ok) throw new Error(`Graph /me → ${res.status}`);
+    const me = await res.json();
+    $("pName").textContent = me.displayName || "—";
+    $("pMail").textContent = me.mail || me.userPrincipalName || "—";
+    const account = msal.getActiveAccount();
+    $("pTid").textContent = account?.tenantId || "—";
+    $("pOid").textContent = me.id || "—";
+    $("profile").classList.add("show");
+    $("userChipName").textContent = me.displayName || me.userPrincipalName || "Signed in";
+    $("userChip").classList.remove("hidden");
+    show($("ssoStatus"), "success", "Signed in successfully.");
+  } catch (err) {
+    show($("ssoStatus"), "error", `Profile load failed: ${err.message}`);
+  }
+}
+
+// -------------------- Calendar export --------------------
+function pad(n) { return String(n).padStart(2, "0"); }
+function toIcsUtc(localInput) {
+  // datetime-local value is local time with no zone; convert to UTC Z form
+  const d = new Date(localInput);
+  return d.getUTCFullYear() +
+    pad(d.getUTCMonth() + 1) +
+    pad(d.getUTCDate()) + "T" +
+    pad(d.getUTCHours()) +
+    pad(d.getUTCMinutes()) +
+    pad(d.getUTCSeconds()) + "Z";
+}
+function icsEscape(s) {
+  return String(s).replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/,/g, "\\,").replace(/;/g, "\\;");
+}
+
+function buildEvent() {
+  const title = $("evTitle").value.trim();
+  const start = $("evStart").value;
+  const end = $("evEnd").value;
+  const location = $("evLocation").value.trim();
+  const body = $("evBody").value.trim();
+  if (!title || !start || !end) throw new Error("Title, start, and end are required.");
+  if (new Date(end) <= new Date(start)) throw new Error("End must be after start.");
+  return { title, start, end, location, body };
+}
+
+function downloadIcs() {
+  try {
+    hide($("calStatus"));
+    const ev = buildEvent();
+    const uid = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}@huellas-m365`;
+    const stamp = toIcsUtc(new Date().toISOString().slice(0, 19));
+    const ics = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "PRODID:-//huellas//m365-integration//EN",
+      "CALSCALE:GREGORIAN",
+      "METHOD:PUBLISH",
+      "BEGIN:VEVENT",
+      `UID:${uid}`,
+      `DTSTAMP:${stamp}`,
+      `DTSTART:${toIcsUtc(ev.start)}`,
+      `DTEND:${toIcsUtc(ev.end)}`,
+      `SUMMARY:${icsEscape(ev.title)}`,
+      `LOCATION:${icsEscape(ev.location)}`,
+      `DESCRIPTION:${icsEscape(ev.body)}`,
+      "END:VEVENT",
+      "END:VCALENDAR"
+    ].join("\r\n");
+
+    const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${ev.title.replace(/[^a-z0-9]+/gi, "_").toLowerCase() || "event"}.ics`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    show($("calStatus"), "success", "Downloaded .ics file.");
+  } catch (err) {
+    show($("calStatus"), "error", err.message);
+  }
+}
+
+function openOutlookDeeplink() {
+  try {
+    hide($("calStatus"));
+    const ev = buildEvent();
+    const startIso = new Date(ev.start).toISOString();
+    const endIso = new Date(ev.end).toISOString();
+    const url = "https://outlook.office.com/calendar/0/deeplink/compose?" + new URLSearchParams({
+      path: "/calendar/action/compose",
+      rru: "addevent",
+      subject: ev.title,
+      startdt: startIso,
+      enddt: endIso,
+      location: ev.location,
+      body: ev.body
+    }).toString();
+    window.open(url, "_blank", "noopener");
+    show($("calStatus"), "info", "Opened Outlook Web compose in a new tab.");
+  } catch (err) {
+    show($("calStatus"), "error", err.message);
+  }
+}
+
+// -------------------- Teams webhook --------------------
+async function sendToTeams() {
+  hide($("whStatus"));
+  const url = $("whUrl").value.trim();
+  const title = $("whTitle").value.trim();
+  const message = $("whMessage").value.trim();
+  const color = $("whColor").value;
+  if (!url) return show($("whStatus"), "error", "Webhook URL is required.");
+  if (!/^https:\/\/[^ ]+\.office\.com\/webhook(b2?)?\//i.test(url) &&
+      !/^https:\/\/[^ ]+\.webhook\.office\.com\//i.test(url)) {
+    return show($("whStatus"), "error", "That doesn't look like a Teams incoming webhook URL.");
+  }
+  if (!title || !message) return show($("whStatus"), "error", "Title and message are required.");
+
+  // MessageCard payload (legacy, still supported by incoming webhook connector)
+  const payload = {
+    "@type": "MessageCard",
+    "@context": "https://schema.org/extensions",
+    "themeColor": color,
+    "summary": title,
+    "title": title,
+    "text": message
+  };
+
+  try {
+    show($("whStatus"), "info", "Sending…");
+    // NOTE: Teams incoming webhooks support CORS for text/plain, not application/json.
+    // We serialize manually and use text/plain to avoid preflight failure.
+    const res = await fetch(url, {
+      method: "POST",
+      mode: "cors",
+      headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) {
+      const t = await res.text().catch(() => "");
+      throw new Error(`${res.status} ${res.statusText}${t ? " — " + t : ""}`);
+    }
+    show($("whStatus"), "success", "Message posted to Teams.");
+  } catch (err) {
+    show($("whStatus"), "error", `Failed: ${err.message}`);
+  }
+}
+
+// -------------------- init --------------------
+(function init() {
+  // Default start/end = tomorrow 10:00 → 11:00 local
+  const d = new Date();
+  d.setDate(d.getDate() + 1);
+  d.setHours(10, 0, 0, 0);
+  const end = new Date(d.getTime() + 60 * 60 * 1000);
+  const fmt = (x) =>
+    x.getFullYear() + "-" + pad(x.getMonth() + 1) + "-" + pad(x.getDate()) +
+    "T" + pad(x.getHours()) + ":" + pad(x.getMinutes());
+  $("evStart").value = fmt(d);
+  $("evEnd").value = fmt(end);
+
+  if (M365_CONFIG.defaultTeamsWebhook) $("whUrl").value = M365_CONFIG.defaultTeamsWebhook;
+
+  $("signInBtn").addEventListener("click", signIn);
+  $("signOutBtn").addEventListener("click", signOut);
+  $("downloadIcs").addEventListener("click", downloadIcs);
+  $("outlookDeeplink").addEventListener("click", openOutlookDeeplink);
+  $("sendWebhook").addEventListener("click", sendToTeams);
+
+  initMsal();
+})();
+</script>
+
+</body>
+</html>
